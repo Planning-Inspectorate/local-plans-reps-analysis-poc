@@ -7,7 +7,7 @@ export function addLocalsConfiguration(): Handler {
 	return (req, res, next) => {
 		res.locals.config = {
 			styleFile: 'style-d1b1fc83.css',
-			headerTitle: 'Manage template'
+			headerTitle: 'Local Plans Representations Analysis – POC'
 		};
 		next();
 	};
