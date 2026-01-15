@@ -1,0 +1,39 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/hint/macro.njk" import govukHint %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+
+{% block pageTitle %}
+    Local Plans Representations Analysis – POC
+{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Local Plans Representations Analysis – POC</h1>
+            <p class="govuk-body">Please share your .xlsx or .xls comments file with us so we can take a closer look, analyze the contents in detail, and provide meaningful insights based on what we find.</p>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <form class="govuk-form" action="/" method="post" enctype="multipart/form-data" novalidate>
+                <div class="govuk-form-group">
+                    {{ govukFileUpload({
+                        id: "file",
+                        name: "file",
+                        label: {
+                            text: "Select file"
+                        },
+                        accept: [".xlsx", ".xls"],
+                        maxSize: 10485760
+                    }) }}
+                    {{ govukHint({ text: "Accepted formats: .xlsx, .xls. Max size 10MB." }) }}
+                </div>
+
+                {{ govukButton({ text: "Upload and analyse" }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
