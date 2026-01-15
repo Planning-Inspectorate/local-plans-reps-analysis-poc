@@ -1,0 +1,59 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/hint/macro.njk" import govukHint %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+
+{% block pageTitle %}
+    {{ config.headerTitle }}
+{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">Local Plans Representations Analysis – POC</h1>
+            <p class="govuk-body">Please share your .xlsx or .xls comments file with us so we can take a closer look, analyze the contents in detail, and provide meaningful insights based on what we find.</p>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+            <form class="govuk-form" action="/" method="post" enctype="multipart/form-data" novalidate>
+                <div class="govuk-form-group">
+                    {{ govukFileUpload({
+                        id: "comments",
+                        name: "comments",
+                        label: {
+                            text: "Select file"
+                        },
+                        accept: [".xlsx", ".xls", ".csv"],
+                        errorMessage: errorMessage,
+                        javascript: true
+                    }) }}
+                    {{ govukHint({ text: "Accepted formats: .xlsx, .xls., csv Max size 10MB." }) }}
+                </div>
+
+                {{ govukButton({ text: "Upload and analyse" }) }}
+            </form>
+        </div>
+        {% if commentsData.fileName %}
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <h2 class="govuk-heading-m">Analysis overview of {{ commentsData.fileName }}</h2>
+                    <p class="govuk-body">File Type: {{ commentsData.fileType}}</p>
+                    <p class="govuk-body">Total comments {{ commentsData.totalCount}}</p>
+                    {% if commentsData.comments and commentsData.comments|length %}
+                        <ul class="govuk-list govuk-list--bullet">
+                            {% for comment in commentsData.comments %}
+                                <li>{{ comment }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                            <p class="govuk-body">No comments to display.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
