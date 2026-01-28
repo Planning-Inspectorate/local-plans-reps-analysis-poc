@@ -1,0 +1,45 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set promptRows = [] %}
+{% if prompts and prompts | length %}
+    {% for prompt in prompts %}
+        {% set description = prompt.displayName or '—' %}
+        {% set category = prompt.category or '—' %}
+        {% set author = prompt.authorName or '—' %}
+        {% set createdOn = prompt.createdAt or '—' %}
+        {% set actionsHtml %}
+            <div class="govuk-!-margin-bottom-1">
+                <a href="/manage-prompts/{{ prompt.id }}/version" class="govuk-link govuk-!-margin-right-3">History</a>
+                <a href="/manage-prompts/{{ prompt.id }}/edit" class="govuk-link govuk-!-margin-right-3">Edit</a>
+                <a href="/manage-prompts/{{ prompt.id }}/delete" class="govuk-link">Delete</a>
+            </div>
+        {% endset %}
+
+        {% set promptRows = (promptRows.push([
+            { text: description },
+            { text: category },
+            { text: author },
+            { text: createdOn },
+            { html: actionsHtml }
+        ]), promptRows) %}
+    {% endfor %}
+{% else %}
+    {% set promptRows = (promptRows.push([
+        { html: '<span class="govuk-hint">No prompts found.</span>', attributes: { colspan: 5 } }
+    ]), promptRows) %}
+{% endif %}
+
+{{ govukTable({
+    caption: "Prompt list",
+    captionClasses: "govuk-table__caption--m",
+    firstCellIsHeader: false,
+    classes: "govuk-table--small-text-until-tablet",
+    head: [
+        { text: "Description" },
+        { text: "Category" },
+        { text: "Author" },
+        { text: "Created On" },
+        { text: "Actions" }
+    ],
+    rows: promptRows
+}) }}
