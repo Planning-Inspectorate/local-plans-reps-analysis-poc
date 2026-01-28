@@ -1,6 +1,6 @@
 import csv from 'csv-parser';
 import { Readable } from 'stream';
-import type { CommentsData, FileUpload } from './interface.ts';
+import type { CommentsData, FileUpload } from './interface.d.ts';
 
 export const buildParseExcel = (XLSX: typeof import('xlsx')) => {
 	return async (file: FileUpload | undefined): Promise<CommentsData> => {

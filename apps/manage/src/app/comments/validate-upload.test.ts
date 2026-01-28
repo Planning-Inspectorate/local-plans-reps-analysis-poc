@@ -1,7 +1,7 @@
 import { describe, test } from 'node:test';
 import assert from 'assert';
 import { validateUpload, validateHeader } from './validate-upload.ts';
-import type { FileUpload } from './interface.ts';
+import type { FileUpload } from './interface.d.ts';
 
 const MAGIC_BYTES = {
 	XLSX: Buffer.from([0x50, 0x4b, 0x03, 0x04]),

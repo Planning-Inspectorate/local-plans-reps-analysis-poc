@@ -1,4 +1,4 @@
-import type { CommentsData } from '../../comments/interface.ts';
+import type { CommentsData } from '../../comments/interface.d.ts';
 
 export interface HomeView {
 	commentsData?: CommentsData | null;

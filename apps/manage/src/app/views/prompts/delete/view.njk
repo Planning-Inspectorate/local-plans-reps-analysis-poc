@@ -1,0 +1,38 @@
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+    {{ config.headerTitle }}
+{% endblock %}
+
+{% block pageContent %}
+
+    {% block content %}
+        <h1 class="govuk-heading-l">
+            Are you sure you want to delete “{{ prompt.displayName }}”?
+        </h1>
+        <p class="govuk-body">
+            This action cannot be undone.
+        </p>
+
+        <div class="govuk-!-margin-top-6">
+            <form method="post" action='/manage-prompts/{{ prompt.id }}/delete' class="govuk-form">
+                {{ govukButton({
+                    text: "Delete Prompt",
+                    classes: "govuk-button--warning govuk-!-margin-right-2",
+                    type: "submit"
+                }) }}
+
+                {{ govukButton({
+                    text: "Cancel",
+                    href: "/manage-prompts",
+                    type: "submit",
+                    classes: "govuk-button govuk-button--secondary"
+                }) }}
+
+            </form>
+        </div>
+
+    {% endblock %}
+
+{% endblock %}
