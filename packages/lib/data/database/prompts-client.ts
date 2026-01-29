@@ -5,7 +5,7 @@
  */
 
 import type { PrismaClient, Prompt, PromptVersion, User } from '@pins/service-name-database/src/client/client.ts';
-import { CreatePromptInput, PromptSummary, UpdatePromptInput } from '../interface.ts';
+import type { CreatePromptInput, PromptSummary, UpdatePromptInput } from '../interface.ts';
 
 export class PromptsClient {
 	#client: PrismaClient;
