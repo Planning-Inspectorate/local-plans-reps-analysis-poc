@@ -1,39 +1,71 @@
 import type { PrismaClient } from '@pins/service-name-database/src/client/client.ts';
 
-// Seed helper to upsert a user by email
+// Ensure a role exists and return it
+async function ensureRole(db: PrismaClient, name: string) {
+	return db.userRole.upsert({
+		where: { name },
+		update: {},
+		create: { name }
+	});
+}
+
+// Ensure a category exists (by unique name) and return it
+async function ensureCategory(db: PrismaClient, name: string | null | undefined) {
+	if (!name) return null;
+	return db.category.upsert({
+		where: { name },
+		update: {},
+		create: { name }
+	});
+}
+
+// Seed helper to upsert a user by email and assign role by name
 async function upsertUser(db: PrismaClient, user: { entraId: string; email: string; fullName: string; role: string }) {
+	const role = await ensureRole(db, user.role);
 	return db.user.upsert({
 		where: { email: user.email },
 		update: {
 			fullName: user.fullName,
-			role: user.role
+			roleId: role.id
 		},
 		create: {
 			entraId: user.entraId,
 			email: user.email,
 			fullName: user.fullName,
-			role: user.role
+			roleId: role.id
 		}
 	});
 }
 
-// Seed helper to upsert a prompt by slug and ensure author relation
-async function upsertPrompt(
+// Seed helper to find or create a prompt (slug removed from schema), ensuring author and category
+async function getOrCreatePrompt(
 	db: PrismaClient,
-	prompt: { slug: string; displayName: string; category?: string | null; authorId: string }
+	prompt: { displayName: string; category?: string | null; authorId: string }
 ) {
-	return db.prompt.upsert({
-		where: { slug: prompt.slug },
-		update: {
+	const category = await ensureCategory(db, prompt.category ?? null);
+
+	// No unique identifier on Prompt other than id/currentVersionId, so we findFirst by displayName+authorId
+	const existing = await db.prompt.findFirst({
+		where: { displayName: prompt.displayName, authorId: prompt.authorId }
+	});
+
+	if (existing) {
+		// Keep displayName up-to-date and category association
+		return db.prompt.update({
+			where: { id: existing.id },
+			data: {
+				displayName: prompt.displayName,
+				categoryId: category?.id ?? null,
+				authorId: prompt.authorId
+			}
+		});
+	}
+
+	return db.prompt.create({
+		data: {
 			displayName: prompt.displayName,
-			category: prompt.category ?? null,
+			categoryId: category?.id ?? null,
 			authorId: prompt.authorId
-		},
-		create: {
-			slug: prompt.slug,
-			displayName: prompt.displayName,
-			category: prompt.category ?? null,
-			Author: { connect: { id: prompt.authorId } }
 		}
 	});
 }
@@ -88,22 +120,19 @@ export async function seedDev(dbClient: PrismaClient) {
 	});
 
 	// Create prompts authored by users
-	const welcomePrompt = await upsertPrompt(dbClient, {
-		slug: 'welcome-message',
+	const welcomePrompt = await getOrCreatePrompt(dbClient, {
 		displayName: 'Welcome Message',
 		category: 'general',
 		authorId: editor.id
 	});
 
-	const goodbyePrompt = await upsertPrompt(dbClient, {
-		slug: 'goodbye-message',
+	const goodbyePrompt = await getOrCreatePrompt(dbClient, {
 		displayName: 'Goodbye Message',
 		category: 'general',
 		authorId: admin.id
 	});
 
-	const planningPrompt = await upsertPrompt(dbClient, {
-		slug: 'planning-overview',
+	const planningPrompt = await getOrCreatePrompt(dbClient, {
 		displayName: 'Planning Overview',
 		category: 'planning',
 		authorId: editor.id
