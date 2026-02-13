@@ -11,10 +11,11 @@ export function configureNunjucks(): nunjucks.Environment {
 
 	// get the require function, see https://nodejs.org/api/module.html#modulecreaterequirefilename
 	const require = createRequire(import.meta.url);
+
 	// get the path to the govuk-frontend folder, in node_modules, using the node require resolution
 	const govukFrontendRoot = path.resolve(require.resolve('govuk-frontend'), '../..');
-	// get the path to the @pins/service-name-lib folder, in node_modules, using the node require resolution
-	const libUi = path.resolve(require.resolve('@pins/service-name-lib'), '..');
+	// get the path to the @pins/local-plans-reps-analysis-poc-lib folder, in node_modules, using the node require resolution
+	const libUi = path.resolve(require.resolve('@pins/local-plans-reps-analysis-poc-lib'), '..');
 	const appDir = path.join(config.srcDir, 'app');
 
 	// configure nunjucks
