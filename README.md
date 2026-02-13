@@ -1,38 +1,60 @@
-# Template Service
+# Local Plans Reps Analysis POC
+This repository contains the Proof of Concept (POC) for Local Plan representations analysis using AI. It brings together all components of the Local Plans Reps Analysis POC, including the application code and the supporting infrastructure‑as‑code.
 
-A template repository for creating new services. This repository includes a basic structure and configuration files covering the common aspects of a service. This includes setup such as:
 
-- ESlint
-- Commitlint
-- Prettier
-- Husky
-- Docker
-- Prisma
+The project utilizes the following tools to ensure code quality and consistency:
+- **Linting & Formatting:** ESlint, Prettier
+- **Commit Standards:** Commitlint, Husky
+- **Infrastructure:** Docker
+- **Database ORM:** Prisma
 
-Generally this repo can be copied/cloned for a new project, and a few find+replace runs will get things started:
+# Setup
 
-* Replace 'service-name' with the new service name in the codebase.
-* If required, replace `portal` with another app name, or remove it if not required
-* If required, replace `manage` with another app name, or remove it if not required
-* If not required, then remove the `apps/function` code
+## Prerequisites
 
-'Portal' app is given in the PINS/Public style. 'Manage' app is given in the back office/internal style, with Entra Auth.
+Before starting, ensure you have the following installed:
+* **Node.js** (Latest LTS version)
+* **Docker** (Desktop or Engine)
 
-## Getting started
+## Installation
 
-* install latest LTS Node
-* install Docker
-* `npm i`
-* `docker compose up` (to start a database)
-* copy `packages/database/.env.example` to `.env`
-* copy `apps/manage/.env.example` to `.env`
-* copy `apps/portal/.env.example` to `.env`
-* Get the `AUTH_*` env vars from a dev and add to `apps/manage/.env` (or set `AUTH_DISABLED=false`)
-* run `npm run db-migrate-dev` to setup the database
-* run `apps/manage>npm run dev` to start the manage app
-* run `apps/portal>npm run dev` to start the portal app
+1.  Clone the repository.
+2.  Install dependencies from the root directory:
+    * run `npm i`
+    
+## Configuration
 
-## WebStorm Run Configurations
+You need to configure environment variables for both the database and the application.
 
-Run configurations are included for most of the npm scripts. Node and npm must be configured for the project for them to work.
-Go to Settings > Languages and Frameworks > Node.js and set the Node interpreter and package manager.
+1.  **Database:** Copy `packages/database/.env.example` to create `.env`.
+2.  **Application:** Copy `apps/manage/.env.example` to create `.env`.
+3.  **Authentication:**
+    * Obtain the `AUTH_*` environment variables from a team member and add them to `apps/manage/.env`.
+    * *Alternatively:* Set `AUTH_DISABLED=false` in the file.
+
+## Database
+
+The database runs inside a Docker container and is managed via Prisma.
+
+1. Start the database container from the project root:
+    * run `docker compose up`
+
+2. Once the container is running, initialize the database schema:
+    * run `npm run db-migrate-dev`
+
+## Running the Application
+
+To start the application:
+
+* run `apps/manage>npm run dev`
+
+# WebStorm Run Configurations
+
+Run configurations are included for most of the npm scripts. To use them, ensure WebStorm is configured correctly:
+
+1.  Go to **Settings** > **Languages and Frameworks** > **Node.js**.
+2.  Set the **Node interpreter** and **Package manager** fields to your local installations.
+
+# Licensing
+
+[MIT](https://opensource.org/licenses/mit) © Planning Inspectorate
