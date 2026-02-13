@@ -1,0 +1,82 @@
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+
+
+{% block pageTitle %}
+    {{ config.headerTitle }}
+{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="govuk-!-margin-bottom-6">
+                {% if  isFormUnchanged %}
+                    {{ govukNotificationBanner({
+                        text: "Please update the form before saving!",
+                        type: 'warning'
+                    }) }}
+                {% endif %}
+            </div>
+            <form method="POST" action="{{ actionPath  }}" novalidate class="govuk-form">
+                {{ govukInput({
+                    id: "displayName",
+                    name: "displayName",
+                    label: { text: "Prompt name" },
+                    value: form.displayName or "",
+                    errorMessage: { text: fieldErrors.displayName } if fieldErrors.displayName
+                }) }}
+
+                {{ govukSelect({
+                    id: "category",
+                    name: "category",
+                    classes: "govuk-!-width-full",
+                    label: { text: "Select Category" },
+                    items: categoriesItems,
+                    value: form.category or "",
+                    errorMessage: { text: fieldErrors.category} if fieldErrors.category
+                }) }}
+
+                {{ govukTextarea({
+                    id: "content",
+                    name: "content",
+                    label: { text: "Prompt text" },
+                    value: form.content or "",
+                    errorMessage: { text: fieldErrors.content } if fieldErrors.content
+                }) }}
+
+                {% if isEdit %}
+                    {{ govukTextarea({
+                        id: "changeNote",
+                        name: "changeNote",
+                        label: { text: "Change note" },
+                        hint: { text: "Describe what changed and why" },
+                        value: form.changeNote or "",
+                        errorMessage: { text: fieldErrors.changeNote } if fieldErrors.changeNote
+                    }) }}
+                {% endif %}
+
+                <div class="govuk-!-margin-top-6">
+                    {{ govukButton({
+                        text: "Save prompt",
+                        type: "submit",
+                        classes: "govuk-!-margin-right-2"
+                    }) }}
+
+                    {{ govukButton({
+                        text: "Cancel",
+                        href: "/manage-prompts",
+                        type: "submit",
+                        classes: "govuk-button govuk-button--secondary"
+                    }) }}
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,16 +1,26 @@
 import type { ManageService } from '#service';
-import type { AsyncRequestHandler } from '@pins/service-name-lib/util/async-handler.ts';
-import type { CommentsData } from '../../comments/interface.ts';
+import type { AsyncRequestHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
+import type { CommentsData } from '../../comments/interface.d.ts';
 import { validateUpload } from '../../comments/validate-upload.ts';
 import { parseCsv, buildParseExcel } from '../../comments/parse-file.ts';
-import type { ErrorMessage } from './interface.ts';
+import type { ErrorMessage } from './interface.d.ts';
 import XLSX from 'xlsx';
+
+interface HomeViewModel {
+	pageHeading: string;
+	commentsData?: CommentsData | null;
+	errorMessage?: ErrorMessage | null;
+}
 
 export function buildViewHome(service: ManageService): AsyncRequestHandler {
 	const { logger } = service;
 	return async (req, res) => {
 		logger.info('view page');
-		return res.render('views/home/view.njk');
+
+		const viewModel: HomeViewModel = {
+			pageHeading: 'Local Plans Representations Analysis'
+		};
+		return res.render('views/home/view.njk', viewModel);
 	};
 }
 
@@ -35,9 +45,12 @@ export function buildPostHome(service: ManageService): AsyncRequestHandler {
 			commentsData = await parseCsv(file);
 		}
 
-		return res.render('views/home/view.njk', {
+		const viewModel: HomeViewModel = {
 			commentsData,
-			errorMessage
-		});
+			errorMessage,
+			pageHeading: 'Local Plans Representations Analysis'
+		};
+
+		return res.render('views/home/view.njk', viewModel);
 	};
 }

@@ -1,0 +1,27 @@
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+
+
+{% block pageTitle %}
+    {{ config.headerTitle }}
+{% endblock %}
+
+{% block pageContent %}
+    {% if status %}
+        {{ govukNotificationBanner({
+            text: "Prompt has been " ~ (status | escape) ~ " successfully!",
+            type: 'success'
+        }) }}
+    {% endif %}
+
+    {{ govukButton({
+        text: "Add prompt",
+        href: "/manage-prompts/add",
+        type: "submit",
+        classes: "govuk-button"
+    }) }}
+    {% include 'views/prompts/list/table.njk' %}
+
+{% endblock %}

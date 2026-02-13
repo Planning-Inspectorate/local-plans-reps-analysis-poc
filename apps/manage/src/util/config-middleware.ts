@@ -6,7 +6,7 @@ import type { Handler } from 'express';
 export function addLocalsConfiguration(): Handler {
 	return (req, res, next) => {
 		res.locals.config = {
-			styleFile: 'style-d1b1fc83.css',
+			styleFile: 'style-dda45dae.css',
 			headerTitle: 'Local Plans Representations Analysis – POC'
 		};
 		next();
