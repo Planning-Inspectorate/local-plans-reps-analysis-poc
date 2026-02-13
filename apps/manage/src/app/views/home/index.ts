@@ -1,5 +1,5 @@
 import { Router as createRouter } from 'express';
-import { asyncHandler } from '@pins/service-name-lib/util/async-handler.ts';
+import { asyncHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
 import type { ManageService } from '#service';
 import type { IRouter } from 'express';
 import { buildPostHome, buildViewHome } from './controller.ts';
