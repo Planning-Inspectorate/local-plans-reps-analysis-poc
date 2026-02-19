@@ -2,6 +2,12 @@ import session from 'express-session';
 import type { RedisClient } from '../redis/redis-client.ts';
 import type { RequestHandler, Request } from 'express';
 
+declare module 'express-session' {
+	interface SessionData {
+		[key: string]: Record<string, Record<string, any>>;
+	}
+}
+
 const DEFAULT_SESSION_FIELD = 'cases';
 
 interface InitSessionOptions {

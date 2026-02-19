@@ -1,5 +1,5 @@
 import path from 'path';
-import type { FileUpload, ValidateHeader, ValidationError } from './interface.ts';
+import type { FileUpload, ValidateHeader, ValidationError } from './interface.d.ts';
 
 export const validateUpload = (file: FileUpload | undefined): ValidationError => {
 	const MAX_FILE_SIZE = 10 * 1024 * 1024;

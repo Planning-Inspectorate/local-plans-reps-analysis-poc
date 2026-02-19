@@ -2,12 +2,12 @@ import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { configureNunjucks } from '../../nunjucks.ts';
 import { buildViewHome, buildPostHome } from './controller.ts';
-import { mockLogger } from '@pins/service-name-lib/testing/mock-logger.ts';
+import { mockLogger } from '@pins/local-plans-reps-analysis-poc-lib/testing/mock-logger.ts';
 import XLSX from 'xlsx';
-import type { HomeView } from './interface.ts';
+import type { HomeView } from './interface.d.ts';
 import type { Request, Response } from 'express';
 import type { ManageService } from '#service';
-import type { FileUpload } from '../../comments/interface.ts';
+import type { FileUpload } from '../../comments/interface.d.ts';
 
 // Helper to create a csv buffer for testing
 export const mockCsvFile = (content: string): FileUpload => {

@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'url';
-import type { BaseConfig } from '@pins/service-name-lib/app/config-types.d.ts';
+import type { BaseConfig } from '@pins/local-plans-reps-analysis-poc-lib/app/config-types.d.ts';
 import { loadEnvFile } from 'node:process';
 
 export interface Config extends BaseConfig {

@@ -22,3 +22,62 @@ datasource db {
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
 // TODO: add models here!
+
+model User {
+  id       String  @id @default(uuid())
+  entraId  String  @unique
+  email    String? @unique
+  fullName String?
+
+  roleId String
+  Role   UserRole @relation(fields: [roleId], references: [id])
+
+  PromptsCreated Prompt[]        @relation("PromptAuthor")
+  EditsMade      PromptVersion[]
+}
+
+model UserRole {
+  id    String @id @default(uuid())
+  name  String @unique // e.g., "admin", "editor"
+  Users User[]
+}
+
+model Prompt {
+  id          String   @id @default(uuid())
+  displayName String
+  createdAt   DateTime @default(now())
+
+  categoryId String?
+  Category   Category? @relation(fields: [categoryId], references: [id])
+
+  authorId String
+  Author   User   @relation("PromptAuthor", fields: [authorId], references: [id])
+
+  // The "Active" Version pointer
+  currentVersionId String?
+  CurrentVersion   PromptVersion? @relation("CurrentVersion", fields: [currentVersionId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+
+  History PromptVersion[] @relation("PromptHistory")
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  Prompts Prompt[]
+}
+
+model PromptVersion {
+  id         String   @id @default(uuid())
+  content    String   @db.Text
+  changeNote String?
+  createdAt  DateTime @default(now())
+
+  promptId String
+  Prompt   Prompt @relation("PromptHistory", fields: [promptId], references: [id])
+
+  // Back-relation for the "current" pointer
+  IsCurrentFor Prompt[] @relation("CurrentVersion")
+
+  editorId String
+  Editor   User   @relation(fields: [editorId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+}

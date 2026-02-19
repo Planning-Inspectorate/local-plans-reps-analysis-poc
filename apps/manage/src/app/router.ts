@@ -1,11 +1,12 @@
 import { Router as createRouter } from 'express';
 import { createRoutesAndGuards as createAuthRoutesAndGuards } from './auth/router.ts';
-import { createMonitoringRoutes } from '@pins/service-name-lib/controllers/monitoring.ts';
+import { createMonitoringRoutes } from '@pins/local-plans-reps-analysis-poc-lib/controllers/monitoring.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
-import { cacheNoCacheMiddleware } from '@pins/service-name-lib/middleware/cache.ts';
+import { cacheNoCacheMiddleware } from '@pins/local-plans-reps-analysis-poc-lib/middleware/cache.ts';
 import type { ManageService } from '#service';
 import type { IRouter } from 'express';
 import { createHomeRoutes } from './views/home/index.ts';
+import { createPromptsRoutes } from './views/prompts/index.ts';
 
 /**
  * Main app router
@@ -38,6 +39,7 @@ export function buildRouter(service: ManageService): IRouter {
 	}
 
 	router.use('/', createHomeRoutes(service));
+	router.use('/manage-prompts', createPromptsRoutes(service));
 	router.use('/error', createErrorRoutes(service));
 
 	return router;
