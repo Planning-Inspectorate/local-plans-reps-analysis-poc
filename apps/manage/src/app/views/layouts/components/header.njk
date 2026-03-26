@@ -1,7 +1,7 @@
 {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 {% from "ui/header/pins-header.njk" import pinsHeader %}
 
-{% macro header(serviceName) %}
+{% macro header(serviceName, isHomePage, isManagePrompt) %}
     {{ pinsHeader({isExternal: false}) }}
 
     {{ govukServiceNavigation({
@@ -12,7 +12,12 @@
             {
                 href: "/",
                 text: "Home",
-                active: true
+                active: isHomePage
+            },
+            {
+                href: "/manage-prompts",
+                text: "Manage prompts",
+                active: isManagePrompt
             },
             {
                 href: "/auth/signout",
