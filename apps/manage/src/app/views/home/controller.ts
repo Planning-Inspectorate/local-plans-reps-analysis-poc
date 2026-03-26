@@ -4,7 +4,7 @@ import type { CommentsData } from '../../comments/interface.d.ts';
 import { validateUpload } from '../../comments/validate-upload.ts';
 import { parseCsv, buildParseExcel } from '../../comments/parse-file.ts';
 import type { ErrorMessage } from './interface.d.ts';
-import XLSX from 'xlsx';
+import * as XLSX from 'xlsx';
 
 interface HomeViewModel {
 	pageHeading: string;
