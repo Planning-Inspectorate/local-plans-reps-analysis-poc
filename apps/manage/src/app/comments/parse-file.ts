@@ -1,8 +1,9 @@
 import csv from 'csv-parser';
 import { Readable } from 'stream';
+import type * as XLSXType from 'xlsx';
 import type { CommentsData, FileUpload } from './interface.d.ts';
 
-export const buildParseExcel = (XLSX: typeof import('xlsx')) => {
+export const buildParseExcel = (XLSX: typeof XLSXType) => {
 	return async (file: FileUpload | undefined): Promise<CommentsData> => {
 		if (!file) {
 			throw new Error('No file provided');

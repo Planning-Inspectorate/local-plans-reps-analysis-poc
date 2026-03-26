@@ -1,0 +1,51 @@
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% block pageTitle %}
+    {{ config.headerTitle }}
+{% endblock %}
+
+{% block pageContent %}
+    {% if promptVersion and promptVersion.length %}
+        <h3 class="govuk-heading-m">Prompt version history: {{ promptVersion.length }}</h3>
+        <ul class="govuk-list govuk-list--bullet">
+            {% for version in promptVersion %}
+                <li>
+                    <div class="govuk-!-margin-bottom-2">
+                        <strong>
+                            {% if loop.index == promptVersion.length %}
+                                Created by:
+                            {% else %}
+                                Edited by:
+                            {% endif %}
+                        </strong>
+                        {{ version.authorName | default('Unknown') }}
+                        <span class="govuk-hint">on {{ version.createdAtDisplay | default('Unknown date') }}</span>
+                    </div>
+
+                    {% if version.changeNote %}
+                        <div class="govuk-body">
+                            <strong>Change note:</strong> {{ version.changeNote }}
+                        </div>
+                    {% endif %}
+
+                    {% set content %}
+                        <p class="govuk-body">
+                            {{ version.content }}
+                        </p>
+                    {% endset %}
+
+                    {{ govukDetails({
+                        summaryText: "View prompt content",
+                        html: content
+                    }) }}
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <h2 class="govuk-heading-m">Prompt history</h2>
+        <p class="govuk-body">No version history found for this prompt.</p>
+    {% endif %}
+{% endblock %}

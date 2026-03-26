@@ -6,6 +6,7 @@ import { cacheNoCacheMiddleware } from '@pins/local-plans-reps-analysis-poc-lib/
 import type { ManageService } from '#service';
 import type { IRouter } from 'express';
 import { createHomeRoutes } from './views/home/index.ts';
+import { createPromptsRoutes } from './views/prompts/index.ts';
 
 /**
  * Main app router
@@ -38,6 +39,7 @@ export function buildRouter(service: ManageService): IRouter {
 	}
 
 	router.use('/', createHomeRoutes(service));
+	router.use('/manage-prompts', createPromptsRoutes(service));
 	router.use('/error', createErrorRoutes(service));
 
 	return router;
