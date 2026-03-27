@@ -1,6 +1,7 @@
 import type { ManageService } from '#service';
 import type { AsyncRequestHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
 import type { DeletePromptViewModel } from './interface.d.ts';
+import { toViewPromptDetail } from '../../../prompts/prompt-mappers.ts';
 import { addSessionData } from '@pins/local-plans-reps-analysis-poc-lib/util/session.ts';
 
 export function buildDeletePromptView(service: ManageService): AsyncRequestHandler {
@@ -15,7 +16,7 @@ export function buildDeletePromptView(service: ManageService): AsyncRequestHandl
 		const viewModel: DeletePromptViewModel = {
 			isManagePrompt: true,
 			pageHeading: 'Delete Prompt',
-			prompt
+			prompt: toViewPromptDetail(prompt)
 		};
 		return res.render('views/prompts/delete/view.njk', viewModel);
 	};

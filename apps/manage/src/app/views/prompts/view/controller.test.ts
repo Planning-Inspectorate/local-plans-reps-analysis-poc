@@ -42,15 +42,14 @@ describe('View Prompt Controller Middleware', () => {
 	const createMockPromptData = (overrides: Record<string, any> = {}) => ({
 		id: promptId,
 		displayName: 'Test Prompt',
-		category: 'general',
-		content: 'Prompt body',
-		changeNote: '',
+		Category: { name: 'general' },
+		CurrentVersion: { content: 'Prompt body', changeNote: '' },
 		...overrides
 	});
 
 	describe('buildGetJourneyMiddleware', () => {
 		it('should fetch a prompt by id and attach journeyResponse to res.locals', async () => {
-			const mockPrompt = createMockPromptData({ changeNote: 'Initial' });
+			const mockPrompt = createMockPromptData({ CurrentVersion: { content: 'Prompt body', changeNote: 'Initial' } });
 			const getPromptById = mock.fn(async () => mockPrompt);
 			const service = setupService({ getPromptById });
 
@@ -68,7 +67,10 @@ describe('View Prompt Controller Middleware', () => {
 		});
 
 		it('should merge session answers with prompt data', async () => {
-			const mockPrompt = createMockPromptData({ displayName: 'Original Name', content: 'Original content' });
+			const mockPrompt = createMockPromptData({
+				displayName: 'Original Name',
+				CurrentVersion: { content: 'Original content', changeNote: '' }
+			});
 			const getPromptById = mock.fn(async () => mockPrompt);
 			const service = setupService({ getPromptById });
 
@@ -122,7 +124,10 @@ describe('View Prompt Controller Middleware', () => {
 		});
 
 		it('should use empty object when no session forms exist', async () => {
-			const mockPrompt = createMockPromptData({ displayName: 'Prompt', content: 'Content' });
+			const mockPrompt = createMockPromptData({
+				displayName: 'Prompt',
+				CurrentVersion: { content: 'Content', changeNote: '' }
+			});
 			const getPromptById = mock.fn(async () => mockPrompt);
 			const service = setupService({ getPromptById });
 

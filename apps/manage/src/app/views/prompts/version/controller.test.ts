@@ -52,9 +52,15 @@ describe('Prompt Version History Controller', () => {
 			assert.strictEqual(view, 'views/prompts/version/view.njk');
 			assert.strictEqual(model.pageHeading, 'Prompt Version');
 			assert.strictEqual(model.backLink, '/manage-prompts');
-			assert.deepStrictEqual(model.promptVersion, mockHistory);
+			assert.strictEqual(model.promptVersion.length, 2);
+			// raw fields preserved
 			assert.strictEqual(model.promptVersion[0].Editor.fullName, 'elizabeth bennet');
 			assert.strictEqual(model.promptVersion[1].Editor.fullName, 'fitzwilliam darcy');
+			// mapper-added display fields
+			assert.strictEqual(model.promptVersion[0].authorName, 'Elizabeth Bennet');
+			assert.strictEqual(model.promptVersion[1].authorName, 'Fitzwilliam Darcy');
+			assert.strictEqual(model.promptVersion[0].displayName, 'Case Officer Summary Tool');
+			assert.ok(model.promptVersion[0].createdAtDisplay);
 		});
 
 		it('should render 404 page when the prompt ID does not exist', async () => {

@@ -84,7 +84,7 @@ describe('PromptsClient', () => {
 	});
 
 	describe('getAllPrompts', () => {
-		it('should return mapped prompt summaries', async () => {
+		it('should return raw prompt data with relations', async () => {
 			mockDb.prompt.findMany.mock.mockImplementation(async () => [createMockPrompt()]);
 			const result = await client.getAllPrompts();
 			assert.strictEqual(result[0].displayName, 'Welcome Message');

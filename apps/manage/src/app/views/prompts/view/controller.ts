@@ -3,6 +3,7 @@ import type { RequestHandler } from 'express';
 import type { Request, Response, NextFunction } from 'express';
 import { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import { asyncHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
+import { toViewPromptDetail } from '../../../prompts/prompt-mappers.ts';
 import { VIEW_PROMPT_JOURNEY_ID } from './journey.ts';
 
 export function buildGetJourneyMiddleware(service: ManageService): RequestHandler {
@@ -21,7 +22,7 @@ export function buildGetJourneyMiddleware(service: ManageService): RequestHandle
 		}
 
 		const sessionAnswers = req.session?.forms?.[VIEW_PROMPT_JOURNEY_ID] ?? {};
-		const answers = { ...prompt, ...sessionAnswers };
+		const answers = { ...toViewPromptDetail(prompt), ...sessionAnswers };
 		res.locals.journeyResponse = new JourneyResponse(VIEW_PROMPT_JOURNEY_ID, 'ref', answers);
 
 		next();
