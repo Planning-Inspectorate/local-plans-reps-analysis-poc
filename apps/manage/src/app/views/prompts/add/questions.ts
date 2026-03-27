@@ -24,7 +24,8 @@ export function getQuestions(isEditing = false, promptCategories: string[]) {
 			fieldName: 'category',
 			url: 'category',
 			validators: [new RequiredValidator('You must select a category for the prompt')],
-			options: buildCategoryItems(promptCategories)
+			options: buildCategoryItems(promptCategories),
+			disableAccessibleAutocomplete: true
 		},
 
 		content: {
