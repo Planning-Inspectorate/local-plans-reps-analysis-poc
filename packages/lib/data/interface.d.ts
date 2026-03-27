@@ -3,14 +3,10 @@ import type { Prompt, PromptVersion, User } from '@pins/local-plans-reps-analysi
 export interface PromptSummary {
 	id: string;
 	displayName: string;
-	category?: string | null;
-	createdAt: string | Date;
-	authorName: string | null;
-	latestVersion?: {
-		id: string;
-		createdAt: Date;
-		changeNote?: string | null;
-	};
+	createdAt: Date;
+	Author: { fullName: string | null } | null;
+	Category: { name: string } | null;
+	CurrentVersion: { id: string; createdAt: Date; changeNote: string | null } | null;
 }
 
 export interface UserInput {
@@ -39,10 +35,9 @@ export type PromptVersionWithRelations = PromptVersion & {
 	Prompt: Prompt;
 };
 
-export interface PromptWithLatest {
+export interface PromptDetail {
 	id: string;
 	displayName: string;
-	category: string;
-	content: string;
-	changeNote: string | null;
+	CurrentVersion: { content: string; changeNote: string | null } | null;
+	Category: { name: string } | null;
 }

@@ -14,11 +14,9 @@ import type {
 	CreatePromptInput,
 	PromptSummary,
 	PromptVersionWithRelations,
-	PromptWithLatest,
-	UpdatePromptInput
+	UpdatePromptInput,
+	PromptDetail
 } from '../interface.d.ts';
-import { capitalizeWords } from '../../util/string-helpers.ts';
-import { formatDateForDisplay } from '../../util/date.ts';
 
 export class PromptsClient {
 	#client: PrismaClient;
@@ -45,7 +43,7 @@ export class PromptsClient {
 
 	// List all prompts with author and latest version metadata
 	async getAllPrompts(): Promise<PromptSummary[]> {
-		const prompts = await this.#client.prompt.findMany({
+		return this.#client.prompt.findMany({
 			include: {
 				Author: {
 					select: { fullName: true }
@@ -63,26 +61,11 @@ export class PromptsClient {
 			},
 			orderBy: { createdAt: 'desc' }
 		});
-
-		return prompts.map((p) => ({
-			id: p.id,
-			displayName: capitalizeWords(p.displayName),
-			category: capitalizeWords(p.Category?.name ?? ''),
-			createdAt: formatDateForDisplay(p.createdAt ?? ''),
-			authorName: capitalizeWords(p.Author?.fullName ?? ''),
-			latestVersion: p.CurrentVersion
-				? {
-						id: p.CurrentVersion.id,
-						createdAt: p.CurrentVersion.createdAt,
-						changeNote: p.CurrentVersion.changeNote ?? null
-					}
-				: undefined
-		}));
 	}
 
 	// Get a prompt by id
-	async getPromptById(id: string): Promise<PromptWithLatest | null> {
-		const prompt = await this.#client.prompt.findUnique({
+	async getPromptById(id: string): Promise<PromptDetail | null> {
+		return this.#client.prompt.findUnique({
 			where: { id },
 			include: {
 				CurrentVersion: {
@@ -98,16 +81,6 @@ export class PromptsClient {
 				}
 			}
 		});
-
-		if (!prompt) return null;
-		const latestVersion = prompt.CurrentVersion as PromptVersion | undefined;
-		return {
-			id: prompt.id,
-			displayName: prompt?.displayName ?? '',
-			category: prompt.Category?.name ?? '',
-			content: latestVersion?.content ?? '',
-			changeNote: latestVersion?.changeNote ?? ''
-		};
 	}
 
 	// Create a new prompt and its initial version
@@ -191,18 +164,11 @@ export class PromptsClient {
 
 	// List full history (versions) for a prompt
 	async getPromptHistory(promptId: string): Promise<PromptVersionWithRelations[]> {
-		const promptVersions = await this.#client.promptVersion.findMany({
+		return this.#client.promptVersion.findMany({
 			where: { promptId },
 			orderBy: { createdAt: 'desc' },
 			include: { Editor: true, Prompt: true }
 		});
-
-		return promptVersions.map((version) => ({
-			...version,
-			displayName: version.Prompt?.displayName ?? '',
-			authorName: capitalizeWords(version.Editor?.fullName ?? ''),
-			createdAtDisplay: formatDateForDisplay(version.createdAt ?? '')
-		}));
 	}
 
 	// Delete a prompt and its history
