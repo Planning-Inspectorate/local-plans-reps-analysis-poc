@@ -1,17 +1,13 @@
-import type { Prompt, PromptVersion, User } from '@pins/local-plans-reps-analysis-poc-database/src/client/client.ts';
+import type {
+	Prisma,
+	Prompt,
+	PromptVersion,
+	User
+} from '@pins/local-plans-reps-analysis-poc-database/src/client/client.ts';
 
-export interface PromptSummary {
-	id: string;
-	displayName: string;
-	category?: string | null;
-	createdAt: string | Date;
-	authorName: string | null;
-	latestVersion?: {
-		id: string;
-		createdAt: Date;
-		changeNote?: string | null;
-	};
-}
+export type PromptSummary = Prisma.PromptGetPayload<{
+	include: { Author: true; Category: true; CurrentVersion: true };
+}>;
 
 export interface UserInput {
 	entraId: string;
@@ -39,10 +35,6 @@ export type PromptVersionWithRelations = PromptVersion & {
 	Prompt: Prompt;
 };
 
-export interface PromptWithLatest {
-	id: string;
-	displayName: string;
-	category: string;
-	content: string;
-	changeNote: string | null;
-}
+export type PromptDetail = Prisma.PromptGetPayload<{
+	include: { CurrentVersion: true; Category: true };
+}>;

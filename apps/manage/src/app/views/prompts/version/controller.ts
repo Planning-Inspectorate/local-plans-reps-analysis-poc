@@ -1,6 +1,7 @@
 import type { ManageService } from '#service';
 import type { AsyncRequestHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
 import type { PromptVersionViewModel } from './interface.d.ts';
+import { toViewPromptVersion } from '../../../prompts/prompt-mappers.ts';
 
 export function buildPromptVersionView(service: ManageService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -20,7 +21,7 @@ export function buildPromptVersionView(service: ManageService): AsyncRequestHand
 			backLink: '/manage-prompts',
 			isManagePrompt: true,
 			pageHeading: 'Prompt Version',
-			promptVersion
+			promptVersion: promptVersion.map(toViewPromptVersion)
 		};
 
 		return res.render('views/prompts/version/view.njk', viewModel);

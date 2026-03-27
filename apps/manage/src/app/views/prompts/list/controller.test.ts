@@ -19,9 +19,10 @@ describe('views/prompts/list/controller', () => {
 			{
 				id: '550e8400-e29b-41d4-a716-446655440000',
 				displayName: 'example',
-				category: 'general',
 				createdAt: new Date('2024-01-01T00:00:00Z'),
-				authorName: 'sarah-jane'
+				Author: { fullName: 'sarah-jane' },
+				Category: { name: 'general' },
+				CurrentVersion: null
 			}
 		];
 
@@ -43,7 +44,9 @@ describe('views/prompts/list/controller', () => {
 
 		const model = render.mock.calls[0].arguments[1];
 		assert.strictEqual(model.pageHeading, 'Manage Prompts');
-		assert.deepStrictEqual(model.prompts, prompts);
+		assert.strictEqual(model.prompts[0].displayName, 'Example');
+		assert.strictEqual(model.prompts[0].authorName, 'Sarah-jane');
+		assert.strictEqual(model.prompts[0].category, 'General');
 		assert.strictEqual(model.status, '');
 	});
 });
