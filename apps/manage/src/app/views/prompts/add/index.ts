@@ -12,7 +12,7 @@ import {
 	validate
 } from '@planning-inspectorate/dynamic-forms';
 import { getQuestions } from './questions.ts';
-import { createJourney, PROMPT_JOURNEY_ID } from './journey.ts';
+import { createAddJourney, PROMPT_JOURNEY_ID } from './journey.ts';
 import { buildSaveController } from './save.ts';
 import { fetchPromptCategoriesMiddleware } from '../view/controller.ts';
 
@@ -26,7 +26,7 @@ export function createAddPromptsRoutes(service: ManageService): IRouter {
 	const getJourney = buildGetJourney((req, journeyResponse) => {
 		const promptCategories = req.res?.locals?.promptCategories ?? [];
 		const questions = getQuestions(false, promptCategories);
-		return createJourney(req, journeyResponse, questions);
+		return createAddJourney(req, journeyResponse, questions);
 	});
 
 	// Create routes

@@ -4,7 +4,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import { asyncHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
 import { toViewPromptDetail } from '../../../prompts/prompt-mappers.ts';
-import { VIEW_PROMPT_JOURNEY_ID } from './journey.ts';
+import { VIEW_PROMPT_JOURNEY_ID } from '../add/journey.ts';
 
 export function buildGetJourneyMiddleware(service: ManageService): RequestHandler {
 	return async (req, res, next) => {

@@ -3,7 +3,7 @@ import type { RequestHandler } from 'express';
 import type { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
 import { addSessionData } from '@pins/local-plans-reps-analysis-poc-lib/util/session.ts';
-import { VIEW_PROMPT_JOURNEY_ID } from '../view/journey.ts';
+import { VIEW_PROMPT_JOURNEY_ID } from '../add/journey.ts';
 
 export function buildEditFn(service: ManageService): RequestHandler {
 	return async (req, res) => {
