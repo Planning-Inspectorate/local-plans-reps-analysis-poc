@@ -10,10 +10,10 @@ import {
 	validate,
 	saveDataToSession
 } from '@planning-inspectorate/dynamic-forms';
-import { createJourney } from './journey.ts';
 import { getQuestions } from '../add/questions.ts';
 import { buildGetJourneyMiddleware, clearChangeNoteMiddleware, fetchPromptCategoriesMiddleware } from './controller.ts';
 import { buildEditFn } from '../edit/controller.ts';
+import { createViewJourney } from '../add/journey.ts';
 
 export function createViewPromptsRoutes(service: ManageService): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -25,7 +25,7 @@ export function createViewPromptsRoutes(service: ManageService): IRouter {
 	const getJourney = buildGetJourney((req, journeyResponse) => {
 		const promptCategories = req.res?.locals?.promptCategories ?? [];
 		const questions = getQuestions(true, promptCategories);
-		return createJourney(req, journeyResponse, questions);
+		return createViewJourney(req, journeyResponse, questions);
 	});
 
 	router.get('/', getJourneyResponse, getJourney, buildList());
