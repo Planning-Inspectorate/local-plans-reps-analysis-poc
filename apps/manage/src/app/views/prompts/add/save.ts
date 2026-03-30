@@ -2,7 +2,7 @@ import type { ManageService } from '#service';
 import type { RequestHandler } from 'express';
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
 import type { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
-import { addSessionData } from '@pins/local-plans-reps-analysis-poc-lib/util/session.ts';
+import { setPromptStatusInSession } from '#util/prompt-session.ts';
 
 import { PROMPT_JOURNEY_ID } from './journey.ts';
 
@@ -35,7 +35,7 @@ export function buildSaveController(service: ManageService): RequestHandler {
 				fullName: fullName!,
 				email: email!
 			});
-			addSessionData(req, 'lastRequest', { status: 'added' }, 'persistence');
+			setPromptStatusInSession(req, 'added');
 			clearDataFromSession({ req, journeyId: PROMPT_JOURNEY_ID });
 
 			return res.redirect('/manage-prompts');

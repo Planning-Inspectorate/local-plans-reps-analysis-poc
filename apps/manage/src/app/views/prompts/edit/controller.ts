@@ -2,7 +2,7 @@ import type { ManageService } from '#service';
 import type { RequestHandler } from 'express';
 import type { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
-import { addSessionData } from '@pins/local-plans-reps-analysis-poc-lib/util/session.ts';
+import { setPromptStatusInSession } from '#util/prompt-session.ts';
 import { VIEW_PROMPT_JOURNEY_ID } from '../add/journey.ts';
 
 export function buildEditFn(service: ManageService): RequestHandler {
@@ -26,7 +26,7 @@ export function buildEditFn(service: ManageService): RequestHandler {
 			});
 
 			clearDataFromSession({ req, journeyId: VIEW_PROMPT_JOURNEY_ID });
-			addSessionData(req, 'lastRequest', { status: 'updated' }, 'persistence');
+			setPromptStatusInSession(req, 'updated');
 			service.logger.info('Prompt edit submitted');
 			return res.redirect('/manage-prompts');
 		} catch (error) {
