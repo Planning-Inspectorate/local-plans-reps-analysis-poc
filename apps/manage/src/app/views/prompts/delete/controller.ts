@@ -2,7 +2,7 @@ import type { ManageService } from '#service';
 import type { AsyncRequestHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
 import type { DeletePromptViewModel } from './interface.d.ts';
 import { toViewPromptDetail } from '../../../prompts/prompt-mappers.ts';
-import { addSessionData } from '@pins/local-plans-reps-analysis-poc-lib/util/session.ts';
+import { setPromptStatusInSession } from '#util/prompt-session.ts';
 
 export function buildDeletePromptView(service: ManageService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -30,7 +30,7 @@ export function buildDeletePromptPost(service: ManageService): AsyncRequestHandl
 		if (id) {
 			try {
 				await service.promptClient.deletePrompt(String(id));
-				addSessionData(req, 'lastRequest', { status: 'deleted' }, 'persistence');
+				setPromptStatusInSession(req, 'deleted');
 				return res.redirect('/manage-prompts');
 			} catch (error) {
 				logger.error(error, 'Failed to delete prompt');
