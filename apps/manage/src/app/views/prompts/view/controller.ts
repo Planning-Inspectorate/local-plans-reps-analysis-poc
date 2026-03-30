@@ -5,6 +5,7 @@ import { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import { asyncHandler } from '@pins/local-plans-reps-analysis-poc-lib/util/async-handler.ts';
 import { toViewPromptDetail } from '../../../prompts/prompt-mappers.ts';
 import { VIEW_PROMPT_JOURNEY_ID } from '../add/journey.ts';
+import { QUESTION_URLS } from '../add/questions.ts';
 
 export function buildGetJourneyMiddleware(service: ManageService): RequestHandler {
 	return async (req, res, next) => {
@@ -29,12 +30,26 @@ export function buildGetJourneyMiddleware(service: ManageService): RequestHandle
 	};
 }
 
-export function clearChangeNoteMiddleware(req: Request, _res: Response, next: NextFunction): void {
-	const TRACKED_QUESTION_URLS = new Set(['display-name', 'category', 'content']);
+/**
+ * Middleware that clears the changeNote field in the session whenever the user
+ * navigates to one of the tracked question pages during an edit flow
+ * (display-name, category, or content). This resets any previous note so that
+ * the user must provide a fresh change note for the new edit.
+ */
+const TRACKED_QUESTION_URLS = new Set<string>([
+	QUESTION_URLS.displayName,
+	QUESTION_URLS.category,
+	QUESTION_URLS.content
+]);
 
+export function clearChangeNoteMiddleware(
+	req: Request,
+	_res: Response,
+	next: NextFunction,
+	trackedQuestionUrls = TRACKED_QUESTION_URLS
+): void {
 	const questionUrl = req.params.question as string;
-
-	if (TRACKED_QUESTION_URLS.has(questionUrl)) {
+	if (trackedQuestionUrls.has(questionUrl)) {
 		if (!req.session.forms) {
 			req.session.forms = {};
 		}
