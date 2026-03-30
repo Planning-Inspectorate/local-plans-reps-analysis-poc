@@ -6,6 +6,13 @@ import {
 	RequiredValidator
 } from '@planning-inspectorate/dynamic-forms';
 
+export const QUESTION_URLS = {
+	displayName: 'display-name',
+	category: 'category',
+	content: 'content',
+	changeNote: 'change-note'
+} as const;
+
 export function getQuestions(isEditing = false, promptCategories: string[]) {
 	const questionProps: Record<string, QuestionProps> = {
 		displayName: {
@@ -13,7 +20,7 @@ export function getQuestions(isEditing = false, promptCategories: string[]) {
 			title: 'Display Name',
 			question: 'What is the display name of the prompt?',
 			fieldName: 'displayName',
-			url: 'display-name',
+			url: QUESTION_URLS.displayName,
 			validators: [new RequiredValidator('You must enter a display name for the prompt')]
 		},
 
@@ -22,7 +29,7 @@ export function getQuestions(isEditing = false, promptCategories: string[]) {
 			title: 'Category',
 			question: 'What is the category of the prompt?',
 			fieldName: 'category',
-			url: 'category',
+			url: QUESTION_URLS.category,
 			validators: [new RequiredValidator('You must select a category for the prompt')],
 			options: buildCategoryItems(promptCategories),
 			disableAccessibleAutocomplete: true
@@ -33,7 +40,7 @@ export function getQuestions(isEditing = false, promptCategories: string[]) {
 			title: 'Content',
 			question: 'What is the content of the prompt?',
 			fieldName: 'content',
-			url: 'content',
+			url: QUESTION_URLS.content,
 			validators: [new RequiredValidator('You must add content of the prompt')]
 		}
 	};
@@ -44,7 +51,7 @@ export function getQuestions(isEditing = false, promptCategories: string[]) {
 			title: 'Change Note',
 			question: 'What is the change note for the prompt?',
 			fieldName: 'changeNote',
-			url: 'change-note',
+			url: QUESTION_URLS.changeNote,
 			validators: [new RequiredValidator('You must add change note')]
 		};
 	}
