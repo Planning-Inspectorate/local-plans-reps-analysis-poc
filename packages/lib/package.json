@@ -13,7 +13,7 @@
     "@pins/local-plans-reps-analysis-poc-database": "*",
     "connect-redis": "*",
     "express-session": "*",
-    "notifications-node-client": "*",
+    "notifications-node-client": "^8.3.2",
     "pino": "*",
     "pino-pretty": "*",
     "redis": "*"
